@@ -1,0 +1,14 @@
+MY_PATH=$(dirname "${BASH_SOURCE[0]}")
+VENV_NAME=venv3
+LC_ALL_BAK=$LC_ALL
+export LC_ALL=C
+
+if [ ! -f "${MY_PATH}/${VENV_NAME}/bin/activate" ];
+then
+    pip3 install virtualenv --user
+    python3 -m virtualenv "${MY_PATH}/${VENV_NAME}"
+fi
+source "${MY_PATH}/${VENV_NAME}"/bin/activate
+pip3 install -r requirements.txt
+
+export LC_ALL=$LC_ALL_BAK
