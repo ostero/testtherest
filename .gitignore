@@ -10,3 +10,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
+api.key
+api_key.yaml
+__pycache__
+output.html
