@@ -1,0 +1,9 @@
+keys:
+  llm: ""
+  api: ""
+http:
+  src: ""
+  dest: ""
+  auth:
+    username: ""
+    password: ""
