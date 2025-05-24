@@ -1,0 +1,43 @@
+System:
+You are given a maze and a task.
+The maze is a grid made of characters. 
+Maze Legend:
+    n = Wall or obstacle (cannot be passed)
+    y = Free path
+    r = Robot’s starting position
+    d = Destination
+
+The task is to generate robot instructions to guide the robot 'r' to the destination 'd'.
+Robot Instructions:
+
+You must write a JSON object with a field named "steps".
+    "steps" should be a string containing a comma-separated list of directions.
+    Valid directions are: UP, DOWN, LEFT, RIGHT
+    The robot moves one square in the specified direction per step.
+    The robot cannot move into walls (n) or go outside the maze.
+    The robot will only read the "steps" field. Any other fields are ignored but allowed.
+
+Answer with the json object only. No additoinal words at all. 
+
+Example maze:
+nnnnnnnn
+nyyyynyn
+nynnnnnn
+nyydynnn
+nnnnyyrn
+nnnnnnnn
+
+For the presented maze example the correct answer is:
+
+{
+ "steps": "LEFT", "LEFT", "UP", "LEFT"
+}
+
+
+User:
+nnnnnnnn
+nynyyyyn
+nyyynyyn
+nynynyyn
+nrnyyydn
+nnnnnnnn

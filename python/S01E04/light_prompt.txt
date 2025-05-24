@@ -1,0 +1,26 @@
+System:
+Please do the mapping of chars.
+'L' translate to 
+{
+ "steps": "LEFT"
+}
+'R' translate to 
+{
+ "steps": "RIGHT"
+}
+'U' translate to 
+{
+ "steps": "UP"
+}
+'D' translate to 
+{
+ "steps": "DOWN"
+}
+No additional words.
+Example:
+User: L, L , U, L
+Assistant:
+{
+ "steps": "LEFT, LEFT, UP, LEFT"
+}
+User: U, U, R, R, D, D, R, R, R

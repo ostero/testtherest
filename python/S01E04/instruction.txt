@@ -1,0 +1,4 @@
+{
+ "steps": "UP, UP, RIGHT, RIGHT, DOWN, DOWN, RIGHT, RIGHT, RIGHT"
+}
+
