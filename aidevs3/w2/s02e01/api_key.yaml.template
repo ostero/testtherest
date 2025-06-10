@@ -1,0 +1,14 @@
+providers:
+  ollama:
+    model: "SpeakLeash/bielik-7b-instruct-v0.1-gguf"
+  openai:
+    model: gpt-4o
+keys:
+  llm: ""
+  api: ""
+http:
+  src: ""
+  dest: ""
+  auth:
+    username: ""
+    password: ""
