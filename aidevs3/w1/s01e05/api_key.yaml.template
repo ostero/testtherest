@@ -4,6 +4,3 @@ keys:
 http:
   src: ""
   dest: ""
-  auth:
-    username: ""
-    password: ""
