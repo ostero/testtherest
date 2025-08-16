@@ -1,0 +1,9 @@
+providers:
+  openai:
+    model: dall-e-3
+keys:
+  llm: ""
+  api: ""
+http:
+  src: ""
+  dest: ""
