@@ -1,0 +1,52 @@
+{
+    "people": [
+        "2024-11-12_report-00-sektor_C4.txt",
+        "2024-11-12_report-12-sektor_A1.mp3",
+        "2024-11-12_report-10-sektor-C1.mp3",
+        "2024-11-12_report-07-sektor_C4.txt"
+    ],
+    "hardware": [
+        "2024-11-12_report-14.png",
+        "2024-11-12_report-16.png",
+        "2024-11-12_report-13.png",
+        "2024-11-12_report-17.png",
+        "2024-11-12_report-15.png"
+    ]
+}
+
+2025-08-10 15:12:39,244 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:12:39,260 [INFO] 2024-11-12_report-14.png: Hardware.
+2025-08-10 15:12:44,837 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:12:44,838 [INFO] 2024-11-12_report-16.png: Hardware.
+2025-08-10 15:12:50,571 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:12:50,572 [INFO] 2024-11-12_report-03-sektor_A3.txt: Other.
+2025-08-10 15:12:56,716 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:12:56,717 [INFO] 2024-11-12_report-06-sektor_C2.txt: Other.
+2025-08-10 15:13:02,708 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:02,717 [INFO] 2024-11-12_report-04-sektor_B2.txt: Other.
+2025-08-10 15:13:08,527 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:08,536 [INFO] 2024-11-12_report-02-sektor_A3.txt: Other.
+2025-08-10 15:13:14,234 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:14,235 [INFO] 2024-11-12_report-05-sektor_C1.txt: Other.
+2025-08-10 15:13:22,110 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:22,111 [INFO] 2024-11-12_report-08-sektor_A1.txt: Other.
+2025-08-10 15:13:27,543 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:27,551 [INFO] 2024-11-12_report-11-sektor-C2.mp3: Other.
+2025-08-10 15:13:33,171 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:33,176 [INFO] 2024-11-12_report-13.png: Hardware.
+2025-08-10 15:13:39,210 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:39,211 [INFO] 2024-11-12_report-17.png: Hardware.
+2025-08-10 15:13:45,804 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:45,807 [INFO] 2024-11-12_report-09-sektor_C2.txt: Other.
+2025-08-10 15:13:52,523 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:52,529 [INFO] 2024-11-12_report-00-sektor_C4.txt: People
+2025-08-10 15:13:58,179 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:13:58,182 [INFO] 2024-11-12_report-12-sektor_A1.mp3: People
+2025-08-10 15:14:03,786 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:14:03,787 [INFO] 2024-11-12_report-10-sektor-C1.mp3: People
+2025-08-10 15:14:09,418 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:14:09,421 [INFO] 2024-11-12_report-01-sektor_A1.txt: Other.
+2025-08-10 15:14:16,181 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:14:16,184 [INFO] 2024-11-12_report-07-sektor_C4.txt: People
+2025-08-10 15:14:23,037 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-10 15:14:23,046 [INFO] 2024-11-12_report-15.png: Hardware.
