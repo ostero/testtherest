@@ -2,6 +2,7 @@
 
 import ollama
 import openai
+import base64
 import logging
 import requests
 import os
@@ -20,22 +21,9 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
 
-def ask_openai(system_prompt: str, user_prompt: str) -> str | None:
-    global config
-    try:        
-        openai.api_key = config.llmkey
-        response = openai.chat.completions.create(
-            model = config.openai_model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            max_tokens=50
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        logging.error(f"Error getting LLM answer: {e}")
-        return None
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
 
 def read_data(filename: str) -> str| None:
     data = None
@@ -63,7 +51,7 @@ def talk_to_robot(url: str, data: dict) -> dict | None:
         logging.error(f"Error communicating with robot: {e}")
         return None
 
-def get_images(command: str) -> list[str]:
+def get_image_names(command: str) -> list[str]:
     verification_request = dict()
     verification_request["task"] = "photos"
     verification_request["apikey"] = config.apikey
@@ -74,6 +62,32 @@ def get_images(command: str) -> list[str]:
         logging.error("Failed to get images from robot.")
         return
     return re.findall("IMG.[^\.]*\.PNG", verification_response)
+
+def download_images(image_names: list[str]) -> None:
+    """Download images from the robot's response."""
+    image_url = "https://centrala.ag3nts.org/dane/barbara/"
+    for image in image_names:
+        logging.info(f"Downloading image: {image_url}{image}")
+        wget.download(image_url + image, out="images" )
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+def ask_openai(system_prompt: str, user_prompt) -> str | None:
+    global config
+    try:        
+        openai.api_key = config.llmkey
+        response = openai.responses.create(
+            model = config.openai_model,
+            input=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ]
+        )
+        return response.output_text.strip()
+    except Exception as e:
+        logging.error(f"Error getting LLM answer: {e}")
+        return None
 
 def main() -> None:
     global config
@@ -88,12 +102,44 @@ def main() -> None:
         return
 
 
-    images = get_images("START")
-    logging.info(f"Robot answers: {images}")
-    image_url = "https://centrala.ag3nts.org/dane/barbara/"
-    for image in images:
-        logging.info(f"Downloading image: {image_url}{image}")
-        wget.download(image_url + image, out="images" )
+    repaired_image_names = get_image_names("START")
+    logging.info(f"Robot answers: {repaired_image_names}")
+    download_images(repaired_image_names)
+    for image_name in repaired_image_names:
+        image_path = os.path.join("images", image_name)
+
+        encoded_image = encode_image(image_path)
+        
+        answer = ask_openai(
+        (
+            "Proszę o pomoc w analizie zdjęcia.\n"
+            "Potrzebuję ryspisu kobiety, która jest na zdjęciu.\n"
+            "Uwaga, zdjęcie może być uszkodzone.\n"
+            "Przeanalizuj jakość tego zdjęcia.\n"
+            "Jeśli na zdjęciu jest kobieta i można ją rozpoznać, odpowiedz OK.\n"
+            "Jeśli zdjęcie jest uszkodzone lub zaszumione odpowiedz REPAIR.\n"
+            "Jeśli zdjęcie jest za ciemne odpowiedz BRIGHTEN.\n"
+            "Jeśli zdjęcie jest za jasne odpowiedz DARKEN.\n"
+            "Jeśli zdjęcie jest dobrej jakości lecz nie przedstawia kobiety, odpowiedz BAD.\n"
+            "Proszę odpowiedzieć tylko jednym słowem, bez dodatkowego tekstu.\n"
+        ),
+        [
+            {"type": "input_text", "text": "Przeanalizuj zdjęcie: " + image_name},
+            {"type": "input_image", "image_url": f"data:image/png;base64,{encode_image('images/' + image_name)}"}
+        ]
+        )
+        if answer:
+            logging.info(f"LLM response for {image_name}: {answer}")
+            if answer == "OK":
+                logging.info(f"Image {image_name} is good.")
+            elif answer == "REPAIR" or answer == "DARKEN" or answer == "BRIGHTEN":
+                logging.info(f"Image {image_name} needs repair.")
+                repaired_image_names = get_image_names(answer + " " + image_name)
+                download_images(repaired_image_names)
+            elif answer == "BAD":
+                logging.info(f"Image {image_name} does not contain a woman.")
+        else:
+            logging.error(f"Failed to get LLM response for {image_name}.")
 
 
 if __name__ == "__main__":
