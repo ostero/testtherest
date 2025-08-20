@@ -1,0 +1,10 @@
+providers:
+  openai:
+    model: gpt-4o
+keys:
+  llm: ""
+  api: ""
+http:
+  src: ""
+  dest: ""
+data_dir: data
