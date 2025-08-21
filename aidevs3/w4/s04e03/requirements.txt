@@ -1,0 +1,7 @@
+openai
+PyYAML
+requests
+html2text
+langchain
+langchain-community
+langchain-core

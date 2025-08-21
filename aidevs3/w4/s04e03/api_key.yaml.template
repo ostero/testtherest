@@ -1,0 +1,10 @@
+providers:
+  openai:
+    model: gpt-4o
+keys:
+  llm: ""
+  api: ""
+http:
+  src: ""
+  page: https://softo.ag3nts.org
+  dest: ""
