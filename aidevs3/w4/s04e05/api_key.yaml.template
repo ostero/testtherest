@@ -1,0 +1,11 @@
+providers:
+  openai:
+    model: gpt-4o
+keys:
+  llm: ""
+  api: ""
+data:
+  pdf: 
+  questions:
+http:
+  dest: 
