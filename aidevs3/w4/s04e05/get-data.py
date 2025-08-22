@@ -3,12 +3,14 @@
 import pymupdf
 import openai
 import base64
+from PIL import Image
 import requests
 import wget
 import json
 import logging
 from config import Config
 import os
+import re
 
 CONTENT_TYPE_HEADER = {'Content-Type': 'application/json;charset=UTF-8'}
 
@@ -66,14 +68,25 @@ def get_data_from_pdf(pdf_file):
     pdf.close()
     return text_file, image_file
 
-def read_text_from_png(image_path):
-    reader = easyocr.Reader(['pl'])
-    ocr_result = reader.readtext(image_path, paragraph=True, x_ths=1000.0)
-    logging.info(f"OCR result: {ocr_result}")
-    result = "" 
-    for (bbox, text) in ocr_result:
-        result += f"{text}\n"
-    return result
+def read_text_from_png(image_file):
+    encoded_image = encode_image(image_file)
+
+    answer = ask_openai(
+    (
+        "Proszę o pomoc w analizie zdjęcia.\n"
+        "Na zdjęciu widoczny jest fragment zapisanej kartki.\n"
+        "Jest to pismo odręczne w języku polskim.\n"
+        "Spróbuj odczytać tekst z tego zdjęcia.\n"
+        "Podaj tylko ten tekst, który zdołasz odczytać, nie halucynuj\n"
+        "Odpowiedz zwięźle, podając tylko sam tekst,\n"
+        " który zdołasz odczytać, bez żadnych dodatkowych komentarzy.\n"
+    ),
+    [
+        {"type": "input_text", "text": "Przeanalizuj zdjęcie: " + image_file},
+        {"type": "input_image", "image_url": f"data:image/png;base64,{encoded_image}"}
+    ]
+    )
+    return answer 
 
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
@@ -114,11 +127,14 @@ def main() -> None:
     answer = ask_openai(
     (
         "Proszę o pomoc w analizie zdjęcia.\n"
-        "Na zdjęciu widoczne są trzy fragmenty zapisanej odręcznie kartki.\n"
-        "Jest to pismo odręczne w języku polskim.\n"
-        "Spróbuj odczytać tekst z tego zdjęcia.\n"
-        "Odpowiedz zwięźle, podając tylko sam tekst,\n"
-        " który zdołasz odczytać, bez żadnych dodatkowych komentarzy.\n"
+        "Na zdjęciu widoczne są fragmenty zapisanej odręcznie kartki.\n"
+        "Pomóż mi wyciąć te fragmenty do osobnych zdjęć\n"
+        "Dla każdego fragmentu podaj wspórzędne x, y lewego górnego rogu wyrażone w pixelach,\n"
+        " oraz szerokość i wysokość fragmentu wy.\n"
+        "Będą to wspórzędne i rozmiary prostokątów, które wytnę z oryginalnego zdjęcia.\n"
+        "Bądź ostrożny, dobierz współrzędne tak, aby objąć cały fragment pisma,\n"
+        "Odpowiedz zwięźle, podaj wyłącznie te dane w następujący sposób: \n" 
+        "x_1, y_1, szerokość_1, wysokość_;x_2, y_2, szerokość_2, wysokość_2;.... x_N, y_N, szerokość_N, wysokość_N"
     ),
     [
         {"type": "input_text", "text": "Przeanalizuj zdjęcie: " + image_file},
@@ -127,8 +143,26 @@ def main() -> None:
     )
     if answer:
         logging.info(f"LLM response for image analysis: {answer}")
-        image_analysis_file = os.path.join(config.data_dir, "notes_image_analysis.txt")    
-        save_data(answer, image_analysis_file)
+
+    notes_coordinates = []
+    for part in answer.split(";"):
+        try:
+            x, y, w, h = map(int,  re.sub('[\(\){}<>]', '', part).split(","))
+            notes_coordinates.append((x, y, x+w, y+h))
+        except ValueError:
+            logging.warning(f"Invalid coordinate format: {part}")
+            continue
+    note_text = ""
+    for i, (x1, y1, x2, y2) in enumerate(notes_coordinates):
+        note_image_path = os.path.join(config.data_dir, f"note_{i+1}.png")
+        with Image.open(image_file) as img:
+            note_img = img.crop((x1, y1, x2, y2))
+            note_img.save(note_image_path)
+            logging.info(f"Saved cropped note image: {note_image_path}")
+            note_text += str(i+1) + ". " + read_text_from_png(note_image_path) + "\n"
+    note_text_file = os.path.join(config.data_dir, f"note_last_page.txt")
+    save_data(note_text, note_text_file)
+    logging.info(f"Extracted note: {note_text}")
 
 if __name__ == "__main__":
     main()
